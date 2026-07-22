@@ -7,7 +7,7 @@ import DevTree from "../components/DevTree";
 
 function AppLayout() {
 
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryFn: getUser,
     queryKey: ['user'],
     retry: 1,
