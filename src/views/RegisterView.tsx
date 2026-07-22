@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form'
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner'
@@ -11,10 +11,13 @@ import type { RegisterCredentials} from '../types/index'
 
 function RegisterView() {
 
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const initialValues: RegisterCredentials = {
     name: '',
     email: '',
-    handle: '',
+    handle: location?.state?.handle || '',
     password: '',
     password_confirmation: ''
   }
@@ -26,10 +29,12 @@ function RegisterView() {
     name: 'password'
   })
 
+  //todo cambiar a mutation
   const handleRegister = async (formData : RegisterCredentials) => {
     try {
       const { data } = await api.post(`/auth/register`, formData)
       toast.success(data.mensaje)
+      navigate('/admin')
       reset()
     } catch (error) {
       if(isAxiosError(error) && error.response){

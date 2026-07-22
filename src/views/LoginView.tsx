@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { isAxiosError } from 'axios';
@@ -17,10 +17,14 @@ function LoginView() {
 
   const { register, handleSubmit, reset, formState: { errors }} = useForm({ defaultValues: initialValues });
 
+  const navigate = useNavigate()
+
+  //todo cambiar a mutation
   const handleLogin = async (formData: LoginCredentials) => {
     try {
       const { data } = await api.post(`/auth/login`, formData)
       localStorage.setItem('AUTH_TOKEN', data.mensaje)
+      navigate('/admin')
       reset()
     } catch (error) {
       if(isAxiosError(error) && error.response){
